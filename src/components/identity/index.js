@@ -106,3 +106,7 @@ function createSendEmailEventHandlers({ messageStore }) {
     },
   }
 }
+
+function streamNameToId(streamName) {
+  return streamName.split(/-(.+)/)[1]
+}
