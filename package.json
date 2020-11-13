@@ -1,0 +1,32 @@
+{
+  "name": "videos-tutorials",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start-dev-server": "nodemon src/bin/start-server.js --color"
+  },
+  "dependencies": {
+    "bcrypt": "^5.0.0",
+    "bluebird": "^3.7.2",
+    "camelcase-keys": "^6.2.2",
+    "colors": "^1.4.0",
+    "cookie-session": "^1.4.0",
+    "dotenv": "^8.2.0",
+    "email-templates": "^7.1.2",
+    "express": "^4.17.1",
+    "knex": "^0.21.12",
+    "nodemailer": "^6.4.16",
+    "nodemailer-pickup-transport": "^0.1.1",
+    "pg": "8.3.0",
+    "pug": "^3.0.0",
+    "uuid": "^8.3.1",
+    "validate.js": "^0.13.1"
+  },
+  "devDependencies": {
+    "@eventide/message-db": "^1.2.3",
+    "eslint": "^7.12.1",
+    "nodemon": "^2.0.6",
+    "prettier": "^2.1.2"
+  }
+}

@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  video-tutorials-db:
+    container_name: video-tutorials-db
+    image: postgres:10.6
+    environment:
+      - POSTGRES_DB=video-tutorials
+    ports:
+      - '0.0.0.0:5432:5432'
+  message-db:
+    container_name: message-db
+    image: ethangarofolo/message-db:latest
+    ports:
+      - '0.0.0.0:5433:5432'
