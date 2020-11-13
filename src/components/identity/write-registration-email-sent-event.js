@@ -1,7 +1,9 @@
+const { v4 } = require('uuid')
+
 function writeRegistrationEmailSentEvent(context, err) {
   const event = context.event
   const registrationEmailSentEvent = {
-    id: uuid(),
+    id: v4(),
     type: 'RegistrationEmailSent',
     metadata: {
       traceId: event.metadata.traceId,

@@ -1,8 +1,10 @@
+const { v4 } = require('uuid')
+
 function writeSentEvent(context) {
   const sendCommand = context.sendCommand
   const streamName = `sendEmail-${sendCommand.data.emailId}`
   const event = {
-    id: uuid(),
+    id: v4(),
     type: 'Sent',
     metadata: {
       originStreamName: sendCommand.metadata.originStreamName,
