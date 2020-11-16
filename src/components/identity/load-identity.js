@@ -16,6 +16,8 @@ const identityProjection = {
   },
   RegistrationEmailSent(identity) {
     identity.registrationEmailSent = true
+
+    return identity
   },
 }
 
