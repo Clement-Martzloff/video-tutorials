@@ -69,7 +69,7 @@ function createHandlers({ actions, queries }) {
     return queries
       .videosByOwnerId(req.context.userId)
       .then((videos) => {
-        const newVideoId = uuid()
+        const newVideoId = v4()
         const renderContext = { newVideoId, videos }
 
         res.render('creators-portal/templates/dashboard', renderContext)
