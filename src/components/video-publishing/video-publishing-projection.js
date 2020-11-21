@@ -1,10 +1,12 @@
-const videoPublishingProjection = {
+module.exports = {
   $init() {
     return {
       id: null,
       publishingAttempted: false,
       sourceUri: null,
       transcodedUri: null,
+      sequence: 0,
+      name: '',
     }
   },
   VideoPublished(video, videoPublished) {
@@ -24,6 +26,15 @@ const videoPublishingProjection = {
 
     return video
   },
-}
+  VideoNamed(video, videoNamed) {
+    video.sequence = videoNamed.globalPosition
+    video.name = videoNamed.data.name
 
-module.exports = videoPublishingProjection
+    return video
+  },
+  VideoNameRejected(video, videoNameRejected) {
+    video.sequence = videoNameRejected.globalPosition
+
+    return video
+  },
+}

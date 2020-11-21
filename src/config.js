@@ -6,7 +6,9 @@ const createPostgresClient = require('./postgres-client')
 const createMessageStore = require('./message-store')
 
 const createHomePageAggregator = require('./aggregators/home-page')
-const createUserCredentials = require('./aggregators/user-credentials')
+const createUserCredentialsAggregator = require('./aggregators/user-credentials')
+const createVideoOperationsAggregator = require('./aggregators/video-operations')
+const createCreatorsVideosAggregator = require('./aggregators/creators-videos')
 
 const createHomeApp = require('./app/home')
 const createRecordViewingsApp = require('./app/record-viewings')
@@ -18,7 +20,7 @@ const createIdentityComponent = require('./components/identity')
 const createSendEmailComponent = require('./components/send-email')
 const createVideoPublishingComponent = require('./components/video-publishing')
 
-function createConfig({ env }) {
+module.exports = function ({ env }) {
   const knexClient = createKnexClient({ connectionString: env.databaseUrl })
   const postgresClient = createPostgresClient({
     connectionString: env.messageStoreConnectionString,
@@ -45,7 +47,15 @@ function createConfig({ env }) {
     db: knexClient,
     messageStore,
   })
-  const userCredentialsAggregator = createUserCredentials({
+  const userCredentialsAggregator = createUserCredentialsAggregator({
+    db: knexClient,
+    messageStore,
+  })
+  const videoOperationsAggregator = createVideoOperationsAggregator({
+    db: knexClient,
+    messageStore,
+  })
+  const creatorsVideosAggregator = createCreatorsVideosAggregator({
     db: knexClient,
     messageStore,
   })
@@ -60,7 +70,13 @@ function createConfig({ env }) {
     messageStore,
   })
 
-  const aggregators = [homePageAggregator, userCredentialsAggregator]
+  const aggregators = [
+    homePageAggregator,
+    userCredentialsAggregator,
+    videoOperationsAggregator,
+    creatorsVideosAggregator,
+  ]
+
   const components = [
     identityComponent,
     sendEmailComponent,
@@ -80,5 +96,3 @@ function createConfig({ env }) {
     components,
   }
 }
-
-module.exports = createConfig

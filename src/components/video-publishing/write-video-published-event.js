@@ -1,9 +1,11 @@
+const { v4 } = require('uuid')
+
 function writeVideoPublishedEvent(context) {
   const command = context.command
   const messageStore = context.messageStore
 
   const event = {
-    id: uuid(),
+    id: v4(),
     type: 'VideoPublished',
     metadata: {
       traceId: command.metadata.traceId,

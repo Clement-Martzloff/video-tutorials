@@ -91,7 +91,6 @@ function createSendEmailEventHandlers({ messageStore }) {
     Sent: (event) => {
       const originStreamName = event.metadata.originStreamName
       const identityId = streamNameToId(originStreamName)
-
       const context = {
         messageStore,
         event,

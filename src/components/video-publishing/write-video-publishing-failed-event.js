@@ -1,9 +1,11 @@
+const { v4 } = require('uuid')
+
 function writeVideoPublishingFailedEvent(err, context) {
   const command = context.command
   const messageStore = context.messageStore
 
   const transcodingFailedEvent = {
-    id: uuid(),
+    id: v4(),
     type: 'VideoPublishingFailed',
     metadata: {
       traceId: command.metadata.traceId,

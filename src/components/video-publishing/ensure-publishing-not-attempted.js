@@ -6,6 +6,7 @@ function ensurePublishingNotAttempted(context) {
   if (video.publishingAttempted) {
     throw new AlreadyPublishedError()
   }
+
   return context
 }
 

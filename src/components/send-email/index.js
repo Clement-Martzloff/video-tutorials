@@ -46,6 +46,7 @@ function build({ messageStore, systemSenderEmailAddress, transport }) {
           systemSenderEmailAddress,
           sendCommand: command,
         }
+
         return (
           Bluebird.resolve(context)
             .then(loadEmail)
