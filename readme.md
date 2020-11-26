@@ -19,7 +19,7 @@ Use the container solution [Docker](https://www.docker.com/) to connect to your 
 ## Run the project locally
 
 ```bash
-yarn start:local
+yarn start-dev-server
 ```
 
 ## Contributing
@@ -30,8 +30,4 @@ Please make sure to update tests as appropriate.
 
 ## Copyright
 
-Excerpted from "Practical Microservices",published by The Pragmatic Bookshelf.
-Copyrights apply to this code. It may not be used to create training material,
-courses, books, articles, and the like. Contact us if you are in doubt.
-We make no guarantees that this code is fit for any purpose.
-Visit [http://www.pragmaticprogrammer.com/titles/egmicro](http://www.pragmaticprogrammer.com/titles/egmicro) for more book information.
+Excerpted from "Practical Microservices", published by The Pragmatic Bookshelf. Visit [http://www.pragmaticprogrammer.com/titles/egmicro](http://www.pragmaticprogrammer.com/titles/egmicro) for more book information.
