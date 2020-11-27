@@ -4,6 +4,7 @@
   "main": "index.js",
   "license": "MIT",
   "scripts": {
+    "start": "src/bin/start-server.js",
     "start-dev-server": "nodemon src/bin/start-server.js --color"
   },
   "dependencies": {
