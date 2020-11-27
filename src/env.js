@@ -3,16 +3,7 @@ const dotenv = require('dotenv')
 
 const packageJson = require('../package.json')
 
-const envResult = dotenv.config()
-
-if (envResult.error) {
-  // eslint-disable-next-line no-console
-  console.error(
-    `${colors.red('[ERROR] env failed to load:')} ${envResult.error}`,
-  )
-
-  process.exit(1)
-}
+dotenv.config()
 
 const env = {
   appName: requireFromEnv('APP_NAME'),
