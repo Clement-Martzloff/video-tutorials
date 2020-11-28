@@ -5,7 +5,9 @@
   "license": "MIT",
   "scripts": {
     "start": "node src/bin/start-server.js",
-    "start-dev-server": "nodemon src/bin/start-server.js --color"
+    "start-dev-server": "nodemon src/bin/start-server.js --color",
+    "populate": "node src/bin/populate.js",
+    "generate-cookie-secret": "node src/bin/generate-cookie-secret"
   },
   "dependencies": {
     "bcrypt": "^5.0.0",
