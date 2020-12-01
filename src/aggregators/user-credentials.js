@@ -4,7 +4,7 @@ function build({ db, messageStore }) {
   const subscription = messageStore.createSubscription({
     streamName: 'identity',
     handlers,
-    subscriberId: 'aggregators:user-credentials',
+    subscriberId: 'userCredentialsView',
   })
 
   function start() {

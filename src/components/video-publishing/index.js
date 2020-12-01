@@ -19,7 +19,7 @@ module.exports = function build({ messageStore }) {
   const subscription = messageStore.createSubscription({
     streamName: 'videoPublishing:command',
     handlers: handlers,
-    subscriberId: `components:video-publishing`,
+    subscriberId: `videoPublishing`,
   })
 
   function start() {

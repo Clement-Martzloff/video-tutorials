@@ -1,4 +1,4 @@
-const componentId = 'aggregators:video-operations'
+const componentId = 'videoOperationsView'
 
 function streamToEntityId(streamName) {
   return streamName.split(/-(.+)/)[1]

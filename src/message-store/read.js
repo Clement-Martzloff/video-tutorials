@@ -3,20 +3,44 @@ const deserializeMessage = require('./deserialize-message')
 const getStreamMessagesSql = 'SELECT * FROM get_stream_messages($1, $2, $3)'
 const getCategoryMessagesSql = 'SELECT * FROM get_category_messages($1, $2, $3)'
 const getLastMessageSql = 'SELECT * FROM get_last_stream_message($1)'
+const getAllMessagesSql = `
+  SELECT
+    id::varchar,
+    stream_name::varchar,
+    type::varchar,
+    position::bigint,
+    global_position::bigint,
+    data::varchar,
+    metadata::varchar,
+    time::timestamp
+  FROM
+    messages
+  WHERE
+    global_position > $1
+  LIMIT $2
+`
 
 function createRead({ db }) {
-  function read(streamName, fromPosition = 0, maxMessages = 1000) {
+  function read(
+    streamName,
+    fromPosition = 0,
+    fromGlobalPosition = 1,
+    maxMessages = 1000,
+  ) {
     let query = null
     let values = []
 
-    if (streamName.includes('-')) {
+    if (streamName === '$all') {
+      query = getAllMessagesSql
+      values = [fromGlobalPosition, maxMessages]
+    } else if (streamName.includes('-')) {
       // Entity streams have a dash
       query = getStreamMessagesSql
       values = [streamName, fromPosition, maxMessages]
     } else {
       // Category streams do not have a dash
       query = getCategoryMessagesSql
-      values = [streamName, fromPosition, maxMessages]
+      values = [streamName, fromGlobalPosition, maxMessages]
     }
 
     return db

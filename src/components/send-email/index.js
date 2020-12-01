@@ -21,7 +21,7 @@ function build({ messageStore, systemSenderEmailAddress, transport }) {
   const subscription = messageStore.createSubscription({
     streamName: 'sendEmail:command',
     handlers,
-    subscriberId: 'components:send-email',
+    subscriberId: 'sendEmail',
   })
 
   return {

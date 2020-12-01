@@ -17,7 +17,7 @@ module.exports = function build({ messageStore }) {
   const identityCommandSubscription = messageStore.createSubscription({
     streamName: 'identity:command',
     handlers: identityCommandHandlers,
-    subscriberId: 'components:identity:command',
+    subscriberId: 'identity:command',
   })
   const identityEventHandlers = createIdentityEventHandlers({
     messageStore,
@@ -25,14 +25,14 @@ module.exports = function build({ messageStore }) {
   const identityEventSubscription = messageStore.createSubscription({
     streamName: 'identity',
     handlers: identityEventHandlers,
-    subscriberId: 'components:identity',
+    subscriberId: 'identity',
   })
   const sendEmailEventHandlers = createSendEmailEventHandlers({ messageStore })
   const sendEmailEventSubscription = messageStore.createSubscription({
     streamName: 'sendEmail',
     handlers: sendEmailEventHandlers,
     originStreamName: 'identity',
-    subscriberId: 'components:identity:sendEmailEvents',
+    subscriberId: 'identitySendEmail',
   })
 
   function start() {

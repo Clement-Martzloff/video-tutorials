@@ -79,7 +79,7 @@ function build({ db, messageStore }) {
   const subscription = messageStore.createSubscription({
     streamName: 'videoPublishing',
     handlers,
-    subscriberId: 'aggregators:creators-videos',
+    subscriberId: 'creatorsVideosView',
   })
 
   function start() {
