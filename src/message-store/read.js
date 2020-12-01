@@ -1,4 +1,5 @@
 const deserializeMessage = require('./deserialize-message')
+const isEntityStream = require('./is-entity-stream')
 
 const getStreamMessagesSql = 'SELECT * FROM get_stream_messages($1, $2, $3)'
 const getCategoryMessagesSql = 'SELECT * FROM get_category_messages($1, $2, $3)'
@@ -21,26 +22,19 @@ const getAllMessagesSql = `
 `
 
 function createRead({ db }) {
-  function read(
-    streamName,
-    fromPosition = 0,
-    fromGlobalPosition = 1,
-    maxMessages = 1000,
-  ) {
+  function read(streamName, fromPosition = 0, maxMessages = 1000) {
     let query = null
     let values = []
 
     if (streamName === '$all') {
       query = getAllMessagesSql
-      values = [fromGlobalPosition, maxMessages]
-    } else if (streamName.includes('-')) {
-      // Entity streams have a dash
+      values = [fromPosition, maxMessages]
+    } else if (isEntityStream(streamName)) {
       query = getStreamMessagesSql
-      values = [streamName, fromPosition, maxMessages]
+      values = [streamName, fromPosition + 1, maxMessages]
     } else {
-      // Category streams do not have a dash
       query = getCategoryMessagesSql
-      values = [streamName, fromGlobalPosition, maxMessages]
+      values = [streamName, fromPosition + 1, maxMessages]
     }
 
     return db

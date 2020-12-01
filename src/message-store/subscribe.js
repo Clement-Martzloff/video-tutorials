@@ -2,6 +2,7 @@ const Bluebird = require('bluebird')
 const { v4 } = require('uuid')
 
 const category = require('./category')
+const isEntityStream = require('./is-entity-stream')
 
 function configureCreateSubscription({ read, readLastMessage, write }) {
   return ({
@@ -15,49 +16,48 @@ function configureCreateSubscription({ read, readLastMessage, write }) {
   }) => {
     const subscriberStreamName = `${subscriberId}+position`
 
-    let currentPosition = 0
-    let currentGlobalPosition = 0
-    let messagesSinceLastPositionWrite = 0
+    let readPosition = 0
+    let messagesBatchCount = 0
     let keepGoing = true
 
-    function loadPositions() {
+    function loadReadPosition() {
       return readLastMessage(subscriberStreamName).then((message) => {
-        currentPosition = message ? message.data.position : 0
-        currentGlobalPosition = message ? message.data.globalPosition : 0
+        readPosition = message ? message.data.position : 0
       })
     }
 
-    function updatePositions(position, globalPosition) {
-      currentPosition = position
-      currentGlobalPosition = globalPosition
-      messagesSinceLastPositionWrite += 1
+    function updateReadPosition(message) {
+      if (isEntityStream(streamName)) {
+        readPosition = message.position
+      } else {
+        readPosition = message.globalPosition
+      }
 
-      if (messagesSinceLastPositionWrite === positionUpdateInterval) {
-        messagesSinceLastPositionWrite = 0
+      messagesBatchCount += 1
 
-        return writePositionsEvent(position, globalPosition)
+      if (messagesBatchCount === positionUpdateInterval) {
+        messagesBatchCount = 0
+
+        return writeReadPositionEvent(readPosition)
       }
 
       return Bluebird.resolve(true)
     }
 
-    function writePositionsEvent(position, globalPosition) {
-      const positionsEvent = {
+    function writeReadPositionEvent(position) {
+      const readPositionEvent = {
         id: v4(),
         type: 'Read',
-        data: { position, globalPosition },
+        data: { position },
       }
 
-      return write(subscriberStreamName, positionsEvent)
+      return write(subscriberStreamName, readPositionEvent)
     }
 
     function getNextBatchOfMessages() {
-      return read(
-        streamName,
-        currentPosition + 1,
-        currentGlobalPosition + 1,
-        messagesPerTick,
-      ).then(filterOnOriginMatch)
+      return read(streamName, readPosition, messagesPerTick).then(
+        filterOnOriginMatch,
+      )
     }
 
     function filterOnOriginMatch(messages) {
@@ -76,7 +76,7 @@ function configureCreateSubscription({ read, readLastMessage, write }) {
     function processBatch(messages) {
       return Bluebird.each(messages, (message) =>
         handleMessage(message)
-          .then(() => updatePositions(message.position, message.globalPosition))
+          .then(() => updateReadPosition(message))
           .catch((err) => {
             logError(message, err)
 
@@ -114,7 +114,7 @@ function configureCreateSubscription({ read, readLastMessage, write }) {
     }
 
     async function poll() {
-      await loadPositions()
+      await loadReadPosition()
 
       // eslint-disable-next-line no-unmodified-loop-condition
       while (keepGoing) {
@@ -141,11 +141,11 @@ function configureCreateSubscription({ read, readLastMessage, write }) {
     }
 
     return {
-      loadPositions,
+      loadReadPosition,
+      writeReadPositionEvent,
       start,
       stop,
       tick,
-      writePositionsEvent,
     }
   }
 }
