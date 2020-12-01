@@ -9,12 +9,16 @@ const createHomePageAggregator = require('./aggregators/home-page')
 const createUserCredentialsAggregator = require('./aggregators/user-credentials')
 const createVideoOperationsAggregator = require('./aggregators/video-operations')
 const createCreatorsVideosAggregator = require('./aggregators/creators-videos')
+const createAdminUsersAggregator = require('./aggregators/admin-users')
+const createAdminStreamAggregator = require('./aggregators/admin-streams')
+const createAdminSubscriberPositionsAggregator = require('./aggregators/admin-subscriber-positions')
 
 const createHomeApp = require('./app/home')
 const createRecordViewingsApp = require('./app/record-viewings')
 const createRegisterUsersApp = require('./app/register-users')
 const createAuthenticateApp = require('./app/authenticate')
 const createCreatorsPortalApp = require('./app/creators-portal')
+const createAdminApp = require('./app/admin')
 
 const createIdentityComponent = require('./components/identity')
 const createSendEmailComponent = require('./components/send-email')
@@ -42,6 +46,10 @@ module.exports = function ({ env }) {
     db: knexClient,
     messageStore,
   })
+  const adminApp = createAdminApp({
+    db: knexClient,
+    messageStoreDb: postgresClient,
+  })
 
   const homePageAggregator = createHomePageAggregator({
     db: knexClient,
@@ -59,6 +67,17 @@ module.exports = function ({ env }) {
     db: knexClient,
     messageStore,
   })
+  const adminUsersAggregator = createAdminUsersAggregator({
+    db: knexClient,
+    messageStore,
+  })
+  const adminStreamsAggregator = createAdminStreamAggregator({
+    db: knexClient,
+    messageStore,
+  })
+  const adminSubscriberPositionsAggregator = createAdminSubscriberPositionsAggregator(
+    { db: knexClient, messageStore },
+  )
 
   const identityComponent = createIdentityComponent({ messageStore })
   const sendEmailComponent = createSendEmailComponent({
@@ -75,6 +94,9 @@ module.exports = function ({ env }) {
     userCredentialsAggregator,
     videoOperationsAggregator,
     creatorsVideosAggregator,
+    adminUsersAggregator,
+    adminStreamsAggregator,
+    adminSubscriberPositionsAggregator,
   ]
 
   const components = [
@@ -91,6 +113,7 @@ module.exports = function ({ env }) {
     registerUsersApp,
     authenticateApp,
     creatorsPortalApp,
+    adminApp,
     messageStore,
     aggregators,
     components,
